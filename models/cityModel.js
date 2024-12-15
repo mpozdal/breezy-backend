@@ -38,7 +38,6 @@ const getCityName = async (latitude, longitude) => {
 `;
 	try {
 		const response = await axios.get(url);
-		console.log(response.data);
 		return response.data;
 	} catch (error) {
 		console.error('Error fetching city data:', error);

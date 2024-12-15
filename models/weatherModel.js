@@ -6,7 +6,7 @@ const getWeatherData = async (latitude, longitude) => {
 
 	try {
 		const response = await axios.get(url);
-		console.log(response.data);
+
 		const sunshineDuration = response.data.daily.sunshine_duration;
 		const dates = response.data.daily.time;
 		const data = sunshineDuration.map((duration, index) => {
@@ -57,7 +57,7 @@ const getWeeklyInfo = async (latitude, longitude) => {
 				response?.data?.hourly?.pressure_msl
 			).toFixed(0),
 			avg_sunshine_time: calculateAvg(data.sunshine_duration),
-			desc: '',
+			desc: analyzeWeather(data.weathercode),
 		};
 		return weeklyInfo;
 	} catch (error) {
@@ -69,6 +69,51 @@ const getWeeklyInfo = async (latitude, longitude) => {
 const calculateAvg = (items) => {
 	const sum = items.reduce((acc, val) => acc + val, 0);
 	return items.length ? sum / items.length : 0;
+};
+
+const analyzeWeather = (codes) => {
+	const categories = {
+		sunny: 0, // 0
+		cloudy: 0, //1-3
+		misty: 0, // 45-48
+		rainy: 0, // 51-67, 80-82
+		snowy: 0, // 71-77
+		stormy: 0, // 95-99
+	};
+	codes.forEach((code) => {
+		if (code === 0) {
+			categories.sunny++;
+		} else if (code >= 1 && code <= 3) {
+			categories.cloudy++;
+		} else if (code >= 45 && code <= 48) {
+			categories.misty++;
+		} else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
+			categories.rainy++;
+		} else if (code >= 71 && code <= 77) {
+			categories.snowy++;
+		} else if (code >= 95 && code <= 99) {
+			categories.stormy++;
+		}
+	});
+	const maxCategory = Object.keys(categories).reduce((a, b) =>
+		categories[a] > categories[b] ? a : b
+	);
+	switch (maxCategory) {
+		case 'sunny':
+			return 'The upcoming week is expected to be mostly sunny.';
+		case 'cloudy':
+			return 'The upcoming week is expected to be mostly cloudy.';
+		case 'misty':
+			return 'The upcoming week is expected to be misty.';
+		case 'rainy':
+			return 'The upcoming week is expected to be rainy.';
+		case 'snowy':
+			return 'The upcoming week is expected to be snowy.';
+		case 'stormy':
+			return 'The upcoming week is expected to be stormy.';
+		default:
+			return 'No weather data available.';
+	}
 };
 
 module.exports = { getWeatherData, getWeeklyInfo, getCurrentTemp };

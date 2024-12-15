@@ -2,7 +2,6 @@ const cityModel = require('../models/cityModel');
 
 const getCity = async (req, res) => {
 	const { input } = req.query;
-	console.log(input);
 	if (!input) {
 		return res.status(400).send('City is required!');
 	}
@@ -28,7 +27,6 @@ const getCityName = async (req, res) => {
 };
 const getCoords = async (req, res) => {
 	const { input } = req.query;
-	console.log(input);
 	if (!input) {
 		return res.status(400).send('City is required!');
 	}
