@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5001
 
 # Uruchom serwer
-CMD ["node", "server.js"]
+CMD ["node", "app.js"]
