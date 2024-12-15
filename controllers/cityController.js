@@ -14,6 +14,18 @@ const getCity = async (req, res) => {
 		res.status(500).send('Error fetching city data');
 	}
 };
+const getCityName = async (req, res) => {
+	const { latitude, longitude } = req.query;
+	if (!latitude && !longitude) {
+		return res.status(400).send('Coords are required!');
+	}
+	try {
+		const response = await cityModel.getCityName(latitude, longitude);
+		res.json(response);
+	} catch (error) {
+		res.status(500).send('Error fetching city name');
+	}
+};
 const getCoords = async (req, res) => {
 	const { input } = req.query;
 	console.log(input);
@@ -28,4 +40,4 @@ const getCoords = async (req, res) => {
 	}
 };
 
-module.exports = { getCity, getCoords };
+module.exports = { getCity, getCoords, getCityName };

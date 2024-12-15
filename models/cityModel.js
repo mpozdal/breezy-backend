@@ -33,5 +33,17 @@ const getCityCoords = async (input) => {
 		throw error;
 	}
 };
+const getCityName = async (latitude, longitude) => {
+	const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.GOOGLE_API_KEY}
+`;
+	try {
+		const response = await axios.get(url);
+		console.log(response.data);
+		return response.data;
+	} catch (error) {
+		console.error('Error fetching city data:', error);
+		throw error;
+	}
+};
 
-module.exports = { getCityData, getCityCoords };
+module.exports = { getCityData, getCityCoords, getCityName };
