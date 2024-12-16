@@ -5,12 +5,24 @@ const cityRoutes = require('./routes/cityRoutes');
 require('dotenv').config();
 const app = express();
 
-app.use(
-	cors({
-		origin: 'https://breezyweatherapp.netlify.app/',
-		methods: ['GET', 'POST', 'PUT', 'DELETE'],
-	})
-);
+const corsOptions = {
+	origin: (origin, callback) => {
+		callback(null, { origin: true });
+	},
+	methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+	allowedHeaders: [
+		'Access-Control-Allow-Origin',
+		'Origin',
+		'X-Requested-With',
+		'Content-Type',
+		'Accept',
+		'Authorization',
+	],
+	credentials: true,
+};
+
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
