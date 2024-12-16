@@ -9,7 +9,6 @@ app.use(
 	cors({
 		origin: 'https://breezyweatherapp.netlify.app/',
 		methods: ['GET', 'POST', 'PUT', 'DELETE'],
-		credentials: true,
 	})
 );
 
